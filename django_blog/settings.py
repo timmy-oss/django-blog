@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import dj_database_url
@@ -22,12 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7vjhd)ow5x^k*8ckkh9p^$w^^wrr-)88xe(_)_)b!l15y2_16l'
+# SECRET_KEY = 'django-insecure-7vjhd)ow5x^k*8ckkh9p^$w^^wrr-)88xe(_)_)b!l15y2_16l'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$e-7vjhd)ow5x^k*8ckkh9p^8obt2_+&k3q+pmu)5%asj6yjpkag')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = [
+    'django-blog-g4.herokuapp.com',
 
 ]
 

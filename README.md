@@ -1,3 +1,3 @@
-#Blogsite using Django and Tailwindcss
+*Blogsite using Django and Tailwindcss
 
-##This is a blogsite written in python. It features basic blog features such as posts, commenting, user authentication and more.
+**This is a blogsite written in python. It features basic blog features such as posts, commenting, user authentication and more.

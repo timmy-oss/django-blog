@@ -1,7 +1,7 @@
 # CUSTOM CONTEXT PROCESSORS
 def site_data(request):
     data = {
-        'sitename': 'NetCruise',
+        'sitename': 'Blogio',
         'framework': 'Django Web Framework',
         'host': 'Heroku',
         'language': 'Python',

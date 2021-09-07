@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block main %}
+<div class='sticky top-16 z-10 bg-white shadow-sm  left-0 right-0 mx-auto   p-2'>
+    <p class='p-4 text-xl text-gray-700 font-bold capitalize lg:text-2xl'><i
+           class="bi-brightness-high text-2xl "></i> Most popular
+    </p>
+</div>
+
+{{block.super}}
+
+{% endblock main %}

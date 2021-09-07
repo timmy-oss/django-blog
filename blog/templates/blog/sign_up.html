@@ -1,0 +1,87 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div class='sticky top-16 z-10 bg-white shadow-sm left-0 right-0 mx-auto   p-2'>
+    <p class='p-4 text-xl text-gray-700 font-bold capitalize lg:text-2xl'><i
+           class="bi-person text-2xl "></i> Create an account
+    </p>
+</div>
+
+<form method='post'
+      action='/sign-up/'
+      class='max-w-lg mx-auto bg-gray-200 p-8'>
+
+
+
+    {% csrf_token %}
+
+    {% if message %}
+    <p class='text-yellow-600 text-base lg:text-xl font-semibold px-4'> {{message}}</p>
+
+
+    {% endif %}
+
+
+    <div class='mx-2 my-8'>
+
+        <input type='text'
+               name='fn'
+               class='px-8 w-full   outline-none py-3 lg:py-6 block rounded-xl placeholder-90'
+               placeholder='Firstname'
+               required>
+        <span class='text-red-500 mx-2 inline-block p-4'>{{form.fn.errors}}</span>
+
+    </div>
+
+    <div class='mx-2 my-8'>
+
+        <input type='text'
+               name='ln'
+               class='px-8 w-full   outline-none py-3 lg:py-6 block rounded-xl placeholder-90'
+               placeholder='Lastname'
+               required>
+        <span class='text-red-500 mx-2 inline-block p-4'>{{form.ln.errors}}</span>
+
+    </div>
+
+
+
+    <div class='mx-2 my-8'>
+
+        <input type='email'
+               name='email'
+               class='px-8 w-full    outline-none py-3 lg:py-6 block rounded-xl placeholder-90'
+               placeholder='Email address'
+               required>
+        <span class='text-red-500 mx-2  inline-block p-4'>{{form.email.errors}}</span>
+
+
+    </div>
+
+
+
+    <div class='mx-2 my-8'>
+
+        <input type='password'
+               name='password'
+               class='px-8 w-full   outline-none py-3 lg:py-6 block rounded-xl placeholder-90'
+               placeholder='Password'
+               required>
+        <span class='text-red-500 mx-2 inline-block p-4'>{{form.password.errors}}</span>
+
+    </div>
+
+    <input type='submit'
+           class='p-3 px-6 lg:py-6 w-full outline-none  block rounded text-xl text-center bg-green-600 hover:bg-green-500 text-white'
+           value='Submit'>
+
+
+</form>
+
+
+
+
+
+{% endblock main %}

@@ -1,0 +1,447 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible"
+              content="IE=edge">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet'
+              href="{% static 'blog/css/tailwind-dark.css' %}">
+        <link rel='stylesheet'
+              href="{% static 'blog/css/bootstrap-icons/bootstrap-icons.css' %}">
+        <script src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
+
+        <script>
+            $(document).ready(function () {
+
+
+
+
+
+                // show Overlay
+                function showOverlay() {
+                    $('#overlay').show();
+                }
+
+                // hide Overlay
+                function hideOverlay() {
+                    $('#overlay').hide();
+                }
+
+                // showMenu
+                function showMenu() {
+                    showOverlay();
+                    $('#menu').fadeIn();
+                }
+
+
+                // closeMenu
+                function closeMenu() {
+                    hideOverlay();
+                    $('#menu').hide();
+                }
+
+
+
+                $('#menuButton').click(showMenu);
+                $('#closeMenu').click(closeMenu);
+
+
+                {% if notice %}
+                setTimeout(function () {
+                    $('#notice').fadeIn();
+
+                }, 1000);
+
+                {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+            });
+
+        </script>
+        <title> {{sitename}} </title>
+
+        <style>
+            .bg-color {
+                background-color: white;
+            }
+
+            .text-indent {
+                text-indent: 16px;
+
+            }
+
+
+
+            @media only screen and (min-width:992px) {
+                .lg-line-height {
+                    line-height: 48px;
+                }
+
+                .first-letter::first-letter {
+
+                    font-size: 30px;
+
+                }
+
+                .max-height {
+                    max-height: 700px;
+                }
+
+            }
+
+            @media only screen and (max-width:768px) {
+                .sm-line-height {
+                    line-height: 32px;
+                }
+
+                .first-letter::first-letter {
+
+                    font-size: 18px;
+
+                }
+
+                .max-height {
+                    max-height: 400px;
+                }
+
+            }
+        </style>
+    </head>
+
+    <body class="bg-color">
+
+
+        {% if notice %}
+        <div id='notice'
+             class='bg-gray-300 hidden relative z-30 max-w-lg shadow-xl mx-auto p-8'>
+            <i onclick='this.parentElement.style.display = "none"'
+               class='bi-x text-gray-100 cursor-pointer p-2 text-xl bg-black hover:bg-gray-600 absolute top-0 right-0'></i>
+            <p class='text-gray-700 text-lg text-left lg:text-xl font-semibold'>
+                {{notice}}</p>
+        </div>
+        {% endif %}
+
+
+        {% block content %}
+
+
+        <!-- Top Header  -->
+        <header class='bg-white sticky top-0 z-20 left-0 right-0 shadow-lg '>
+            <div class='flex flex-row justify-between p-3'>
+                <h1 class='text-xl sans select-none font-bold text-gray-700 p-1 flex-initial'>
+
+                    {{sitename}}
+                </h1>
+
+                <!-- Categories reel  -->
+                <div class=' flex-grow mx-4  hidden lg:block rounded bg-gray-600'>
+
+                    <div class='flex flex-row justify-around text-white '>
+                        {% for category in featured_categories %}
+                        <a href='{% url "blog:category" category.slug_field %}'
+                           class='hover:bg-gray-500 inline-block font-light  py-2 flex-grow text-center'>{{category.title}}</a>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <i id='menuButton'
+                   class='bi-justify-left bg-gray-700 rounded px-1   text-white text-4xl hover:text-gray-500 cursor-pointer '></i>
+
+            </div>
+
+            <!-- Overlay  -->
+            <div id='overlay'
+                 class='bg-gray-900 opacity-90 hidden fixed top-0 left-0 right-0 bottom-0'></div>
+
+            <!-- The Menu  -->
+            <div id='menu'
+                 class='fixed max-w-xl mx-auto  bg-gray-600 z-30  hidden top-0 right-0 bottom-0 left-0 '>
+                <ul
+                    class='flex flex-col justify-center items-stretch content-center text-gray-900  text-center relative  divide-y-2 divide-gray-700 '>
+
+
+
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal  hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12'
+                           href='/'> <i class='bi-house-door'></i> &nbsp; Home </a>
+                    </li>
+
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12'
+                           href='/posts/today/'> <i class='bi-bullseye'></i>&nbsp; Today </a>
+                    </li>
+
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12'
+                           href='/posts/latest/'> <i class='bi-lightning'></i>&nbsp; Latest </a>
+                    </li>
+
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12 '
+                           href='/posts/most-popular/'> <i class='bi-brightness-high'></i>&nbsp;
+                            Most popular </a>
+                    </li>
+
+
+
+                    {% if request.user.is_authenticated %}
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12'
+                           href='/sign-out/'> <i class='bi-person-x'></i>&nbsp; Sign out </a>
+                    </li>
+
+
+
+                    {% else %}
+                    <li
+                        class='block bg-gray-600  flex-grow  text-xl font-normal hover:bg-gray-800 cursor-pointer hover:text-white'>
+                        <a class='block py-12'
+                           href='/sign-in/'> <i class='bi-person-check'></i>&nbsp; Sign in </a>
+                    </li>
+                    {% endif %}
+
+                    <span id='closeMenu'
+                          class='absolute p-2 bg-gray-900 hover:bg-gray-800 hover:text-gray-50 text-gray-500 cursor-pointer top-0 right-0'>
+                        <i class='bi-x text-2xl'></i>
+                    </span>
+
+
+
+                </ul>
+            </div>
+        </header>
+
+
+
+
+        <!-- The Body of the page  -->
+        <div class='flex flex-col lg:flex-row justify-between content-center '>
+
+            <main class='lg:w-4/5 md:w-3/5'>
+
+                {% block main %}
+
+                {% for post in posts %}
+                <a href='{% url "blog:post" post.slug_field %}'>
+                    <div
+                         class='text-center shadow bg-gray-50 my-16 max-w-3xl w-11/12 lg:w-10/12 mx-auto pb-4'>
+
+
+                        {% if post.cover %}
+                        <img height="300px"
+                             class='block rounded text-xs  w-full mx-auto '
+                             src='{{post.get_mock_cover}}'
+                             alt='{{post.title}}'>
+                        {% endif %}
+
+                        <h1 class=' text-2xl lg:text-6xl p-4 py-8 my-2 font-normal sans'>
+                            {{post.title}}
+                        </h1>
+                        <p
+                           class='text-base lg:text-2xl text-left opacity-90 text-gray-800 p-4 lg:px-8 leading-16 sans text-left'>
+                            Lorem ipsum
+                            dolor
+                            sit amet
+                            consectetur
+                            adipisicing elit. Minima veniam,
+                            voluptatibus accusamus laudantium neque suscipit ipsa rem et soluta
+                            nobis
+                            ullam facilis facere voluptatum eaque explicabo necessitatibus? Iste,
+                            quam
+                            deleniti. Nostrum, a explicabo! Numquam sunt officia dicta temporibus
+                            voluptatem eos illo, molestiae sapiente laborum fuga quaerat suscipit
+                            accusamus tempore quam impedit est accusantium culpa perspiciatis? Ipsa
+                            doloremque est aut officiis debitis dolor eveniet quod facilis sint
+                            vero...
+                        </p>
+
+                        <hr>
+
+                        <div class='my-4'>
+                            <p class=' text-left text-sm lg:text-xl opacity-90 lg:float-none mx-4'>
+                                <i class='bi-person'>
+                                </i>
+                                Author: {{post.author.get_full_name}}
+
+                            </p>
+                            <p class=' text-left text-sm lg:text-xl opacity-90 lg:float-none mx-4'>
+                                <i class='bi-clock'></i>
+                                Published:
+                                {{post.get_pub_date.date}}
+
+
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+
+
+
+
+                <div class='bg-gray-800 text-white  py-16'>
+
+                    <div class='flex-col lg:flex-row justify-center space-y-8 content-center'>
+
+                        <ul
+                            class='flex-col text-center text-xs space-x-12 lg:text-sm lg:flex-row justify-evenly content-center'>
+                            <a href='/'> Home </a>
+                            <a href='/posts/today/'> Today </a>
+                            <a href='/posts/latest/'> Latest </a>
+                            <a href='/posts/most-popular/'> Most read </a>
+
+
+
+                        </ul>
+
+
+                        <ul
+                            class='flex-col text-center text-xs space-x-8 lg:text-sm lg:flex-row justify-evenly content-center'>
+                            <span class='cursor-pointer'
+                                  title='{{host}}'>Host </span>
+                            <span class='cursor-pointer'
+                                  title='{{framework}}'>Framework </span>
+                            <span class='cursor-pointer'
+                                  title='{{language}}'>Language </span>
+                            <span class='cursor-pointer'
+                                  title='{{developer}}'>Developer </span>
+
+
+
+                        </ul>
+
+
+                        <ul
+                            class='flex-col text-center pt-8 text-xs space-x-12 lg:text-sm lg:flex-row justify-evenly content-center'>
+                            <a href='http://facebook.com/timmypelumy/'> <i
+                                   class='bi-facebook text-xl'></i> </a>
+                            <a href='http://linkedin.com/in/timmypelumy/'> <i
+                                   class='bi-linkedin text-xl'></i> </a>
+                            <a href='http://twitter.com/timmypelumy/'> <i
+                                   class='bi-twitter text-xl'></i> </a>
+                            <a href='http://github.com/timmypelumy/'> <i
+                                   class='bi-github text-xl'></i> </a>
+
+
+
+                        </ul>
+
+                        <p class='text-center text-xs pt-8 lg:text-sm'> &copy; {% now "Y" %} </p>
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+                {% endblock main %}
+
+            </main>
+
+            {% block aside %}
+
+
+            <aside>
+                <div
+                     class='hidden lg:block md:w-2/5 lg:w-1/5 bg-gray-700 lg:fixed right-0 top-0 h-screen pt-12 pb-12 overflow-y-scroll'>
+
+                    <p
+                       class=' sticky mx-auto bg-gray-700 z-10 top-0 left-0 right-0 font-bold text-2xl text-center py-6 text-white'>
+                        Explore </p>
+
+                    {% for category in categories %}
+                    <div class='m-1 ml-2 my-2 text-white px-4 '>
+
+                        <h2 title='{{category.title}}'
+                            class='font-bold select-none  inline-block'><i class='bi-bullseye'></i>
+                            &nbsp;
+                            {{category.title}}</h2>&nbsp; <i id='show_cat_{{category.id}}'
+                           class='bi-plus-square text-sm cursor-pointer show_cat{{category.id}}'></i>
+                        <i id='show_cat_2_{{category.id}}'
+                           class='bi-x-square text-sm cursor-pointer hidden show_cat{{category.id}}'></i>
+
+
+                        {% if category.posts.count %}
+                        <span
+                              class='float-right text-xs bg-gray-900 p-1 rounded-full text-white'>{{category.posts.count}}</span>
+
+                        {% endif %}
+
+
+
+                        <div id='cat_{{category.id}}'
+                             class='ml-8 hidden'>
+                            {% for post in category.posts.all %}
+                            <a href='{% url "blog:post"  post.slug_field %}'>
+                                <h3 title='{{post.title}}'
+                                    class='p-2 hover:underline text-left text-sm'><i
+                                       class='bi-dot text-sm'></i>
+                                    {{post.title}}</h3>
+                            </a>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <script>
+
+                        function magic() {
+                            $('#cat_{{category.id}}').slideToggle('fast');
+                            $('.show_cat{{category.id}}').toggle();
+                        }
+
+
+                        $('#show_cat_{{category.id}}').click(magic);
+                        $('#show_cat_2_{{category.id}}').click(magic);
+
+
+
+                    </script>
+
+                    {% endfor %}
+
+
+                </div>
+            </aside>
+            {% endblock aside %}
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        {% endblock content %}
+
+    </body>
+
+</html>

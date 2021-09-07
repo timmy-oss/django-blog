@@ -1,0 +1,244 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block main %}
+
+
+<div class="bg-white max-w-5xl  mx-auto  p-4">
+
+    <h1 style="font-family: Georgia, 'Times New Roman', Times, serif;"
+        class='text-2xl lg:text-6xl  font-bold text-left  p-2 lg:p-8 w-full lg:w-10/12 mx-auto mb-8'>
+        {{post.title}}</h1>
+
+    <div style="font-family: Georgia, 'Times New Roman', Times, serif;"
+         class='my-4 ml-1 lg:ml-4  '>
+        <p class='text-white shadow-lg my-2 lg:font-light inline-block bg-gray-700  p-2 text-xs'>
+            Published:
+            {{post.get_pub_date}}
+        </p>
+        <br>
+
+        <p class='text-white shadow-lg lg:font-light inline-block bg-gray-700  p-2 text-xs'>
+            Author:
+            {{post.author.get_full_name}}</p>
+    </div>
+
+
+    <div>
+        {% if post.cover %}
+        <img height="200px"
+             class='block lg:rounded text-xs mb-4 mx-2 lg:mx-0 w-full mx-auto'
+             src='{{post.get_mock_cover}}'
+             alt='{{post.title}}'>
+
+        {% endif %}
+
+
+        {% for part in post.get_parts %}
+
+        {% if part.is_article %}
+
+        {% if part.heading %}
+        <h2 class='text-left mx-1 p-4  font-bold text-xl   lg:text-4xl text-gray-900 '>
+            {{part.heading}}</h2>
+        {% endif %}
+
+
+        <p
+           class='text-md lg:text-3xl first-letter lg-line-height sm-line-height overflow-x-hidden text-indent  lg:p-4 lg:opacity-90 '>
+            {{part.content}}
+
+
+        </p>
+
+        {% elif part.is_image %}
+
+        <img height="200px"
+             class='block lg:rounded text-xs mb-2 mt-3 mx-2 lg:mx-0 w-full mx-auto'
+             src='{{post.get_mock_cover}}'
+             alt='{{part.caption}}'>
+
+        <p class='opacity-80 text-lg lg:text-xl text-center p-2 mb-4 lg:bg-gray-200 '>
+            {{part.caption}} </p>
+
+        {% endif %}
+
+        {% endfor  %}
+
+        <div class='my-4'>
+            <hr>
+            <p style='font-family:cursive'
+               class='p-6 opacity-90 text-lg lg:text-2xl inline-block'>{{post.get_pub_date}}</p>
+            <span style='font-family:cursive'
+                  class='text-sm lg:text-lg text-blue-900 opacity-95 align-middle inline-block   text-gray-500 rounded-xl font-black  p-2 px-8'>{{post.category.title}}</span>
+            <hr>
+        </div>
+
+
+    </div>
+
+    <!-- <div class='flex flex-row justify-around  bg-gray-200 bg-white  rounded  '>
+
+        <button class='flex-grow'> <i
+               class='bi-hand-thumbs-down text-red-500  p-2 px-4 lg:p-4 rounded text-2xl  lg:text-3xl inline-block mx-auto '></i>
+            <span class='text-sm text-center text-red-500'>{{post.downvotes}}</span></button>
+
+        <button class='flex-grow'> <i
+               class='bi-hand-thumbs-up text-green-500  p-2 px-4  lg:p-4 rounded text-2xl lg:text-3xl inline-block mx-auto'></i>
+            <span class='text-sm text-center text-green-500'>{{post.upvotes}}</span> </button>
+
+
+
+    </div> -->
+
+
+</div>
+
+
+{% if show_votes %}
+<div
+     class='flex flex-row justify-around z-20 sticky bottom-0 left-0 right-0 bg-gray-200 lg:bg-gray-100 lg:shadow  rounded  '>
+    <a href='{% url "blog:vote" post.slug_field "0" %}'><button class='flex-grow'> <i
+               class='bi-hand-thumbs-down text-red-500 hover:bg-red-500 hover:text-white p-2 px-4 lg:p-4 rounded text-2xl  lg:text-3xl inline-block mx-auto '></i><span
+                  class='text-sm text-center text-red-500'>{{post.downvotes}}</span></button></a>
+
+    <a href='{% url "blog:vote" post.slug_field "1" %}'><button class='flex-grow'> <i
+               class='bi-hand-thumbs-up text-green-500 hover:bg-green-500 hover:text-white p-2 px-4  lg:p-4 rounded text-2xl lg:text-3xl inline-block mx-auto'></i><span
+                  class='text-sm text-center text-green-500'>{{post.upvotes}}</span></button>
+    </a>
+
+</div>
+
+{% endif %}
+
+
+
+<div class='m-2 .max-height p-4 lg:max-w-2xl mx-auto mb-8'>
+    <hr>
+    <p
+       class='font-bold text-xl sticky top-12 z-30 inline-block mx-auto  rounded-xl left-0 right-0 opacity-90 p-4  text-center text-gray-900'>
+        <i class='bi-chat text-2xl'></i> Comments
+    </p>
+
+
+
+    <div>
+        {% if not request.user.is_authenticated %}
+        <hr>
+
+        <p class='text-center text-sm p-4 lg:text-base font-bold text-yellow-500'> Sign in to leave
+            a comment and see who posts what
+            <hr>
+        </p>
+
+        {% else %}
+
+
+
+
+        <div class=' '>
+            <form method='post'
+                  action='{% url "blog:comment" post.id %}'>
+
+                {% csrf_token %}
+                <textarea class='pt-8 outline-none pl-8 resize-none pr-2 pb-8 lg:p-16 border-2 text-lg w-full border-opacity-80 placeholder-gray-300 my-4 border-gray-300 border-solid rounded-lg'
+                          name='comment'
+                          required
+                          placeholder='Leave a comment'>.</textarea>
+
+                <button class='w-full p-2 lg:p-6 rounded text-xl font-normal hover:bg-green-600 bg-green-700 text-white text-center '
+                        role='button'
+                        type='submit'> Submit </button>
+            </form>
+        </div>
+        <hr>
+
+        {% endif %}
+
+
+        {% for comment in post.comments.all  %}
+        <div class='bg-gray-200 relative rounded p-4 overflow-x-hidden overflow-y-hidden my-8'>
+            <i class='bi-person-circle text-2xl opacity-80 '></i> &nbsp;&nbsp;
+            <span class='font-bold p-3 capitalize text-center opacity-95'>
+                {%if request.user.is_authenticated %}
+                {{comment.author.get_full_name}}
+                {% else %}
+                Anonymous
+                {% endif %}
+            </span>
+            <p style="font-family: Georgia, 'Times New Roman', Times, serif;"
+               class='p-2 py-4 text-gray-600 text-base lg:text-xl'>{{comment.content}}</p>
+
+            <div>
+                <i class='bi-clock text-gray-700'></i>
+                <span class='text-xs lg:text-sm'>{{comment.pub_date}}</span>
+                {% if request.user.is_authenticated %}
+                <button class='absolute bottom-0 right-0'><i
+                       class='bi-hand-thumbs-up p-2 text-2xl rounded-lg hover:bg-gray-500 bg-gray-300'></i></button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor  %}
+    </div>
+
+
+
+
+</div>
+
+
+<div class='bg-gray-800 text-white  py-16'>
+
+    <div class='flex-col lg:flex-row justify-center space-y-8 content-center'>
+
+        <ul
+            class='flex-col text-center text-xs space-x-12 lg:text-sm lg:flex-row justify-evenly content-center'>
+            <a href='/'> Home </a>
+            <a href='/posts/today/'> Today </a>
+            <a href='/posts/latest/'> Latest </a>
+            <a href='/posts/most-popular/'> Most read </a>
+
+
+
+        </ul>
+
+
+        <ul
+            class='flex-col text-center text-xs space-x-8 lg:text-sm lg:flex-row justify-evenly content-center'>
+            <span class='cursor-pointer'
+                  title='{{host}}'>Host </span>
+            <span class='cursor-pointer'
+                  title='{{framework}}'>Framework </span>
+            <span class='cursor-pointer'
+                  title='{{language}}'>Language </span>
+            <span class='cursor-pointer'
+                  title='{{developer}}'>Developer </span>
+
+
+
+        </ul>
+
+
+        <ul
+            class='flex-col text-center pt-8 text-xs space-x-12 lg:text-sm lg:flex-row justify-evenly content-center'>
+            <a href='http://facebook.com/timmypelumy/'> <i class='bi-facebook text-xl'></i> </a>
+            <a href='http://linkedin.com/in/timmypelumy/'> <i class='bi-linkedin text-xl'></i> </a>
+            <a href='http://twitter.com/timmypelumy/'> <i class='bi-twitter text-xl'></i> </a>
+            <a href='http://github.com/timmypelumy/'> <i class='bi-github text-xl'></i> </a>
+
+
+
+        </ul>
+
+        <p class='text-center text-xs pt-8 lg:text-sm'> &copy; {% now "Y" %} </p>
+
+    </div>
+
+
+
+
+
+</div>
+
+
+{% endblock main %}
